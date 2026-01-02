@@ -2,24 +2,27 @@
 # Output: ["(())()", "()()()"]
 
 def fix_broken_expression(s):
-    output=[]
-    if is_valid(s):
-        output.append(s)
-        return output
-    if s[-1]=="(" :
-        s=s[:-1]
-    if s[0]==")":
-        s=s[1:]
-    for i in range(len(s)):
-        if s[-1]=="(" :
-            s=s[:-1]
-        if s[0]==")":
-            s=s[1:]
-        new_expression=s[:i]+s[i+1:]
-        if is_valid(new_expression) and new_expression not in output:
-            output.append(new_expression)
-    return output
-    
+    result=set()
+    queue=[s]
+    visited={s}
+    while queue:
+        current=queue.pop(0)
+        if is_valid(current):
+            result.add(current)
+        else:
+            for i in range(len(current)):
+                new_expr=current[:i]+current[i+1:]
+                if new_expr not in visited:
+                    visited.add(new_expr)
+                    queue.append(new_expr)
+    if len(result)==0:
+        return [""]  
+    max_length=max(len(expr) for expr in result)
+    return [expr for expr in result if len(expr)==max_length]
+
+
+
+
 def is_valid(expression):
     count_paranthesis=0
     for i in expression:
@@ -27,9 +30,9 @@ def is_valid(expression):
             count_paranthesis+=1
         elif i==")":
             count_paranthesis-=1
-    if count_paranthesis==0:
-        return True
-    return False
+        if count_paranthesis<0:
+            return False
+    return count_paranthesis==0
     
 
 print(fix_broken_expression("()())()"))
