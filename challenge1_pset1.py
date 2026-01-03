@@ -21,4 +21,4 @@ def calculate_impact(contribution):
     return impact
 contributions = [-1, 1, 0, -3, 3]
 impact = calculate_impact(contributions)
-print(impact)  # Output: [0, 0, 9, 0, 0]
+print(impact)  
